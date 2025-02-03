@@ -1,10 +1,10 @@
 import warnings
 from tslib.interface import Eval,TSModel
-from tslib.models import Arima,ProphetModel,TBATSModel
+from tslib.models import Arima,ProphetModel,TBATSModel, CrostonModel, ADIDAModel, IMAPAModel
 import pandas as pd
 from tqdm import tqdm
 warnings.simplefilter('ignore', category=UserWarning)
-model_map = {'arima':Arima,'prophet':ProphetModel,'tbats':TBATSModel}
+model_map = {'arima':Arima,'prophet':ProphetModel,'tbats':TBATSModel,'croston':CrostonModel,'adida':ADIDAModel,'imapa':IMAPAModel}
 
 class CrossValidation(Eval):
     def evaluate(self,folds:list,model:TSModel,type:str,**kwargs)->dict:
@@ -24,14 +24,15 @@ class CrossValidation(Eval):
                 m = m.fit(train)
             test=fold['test']
             frsct = m.forecast(steps=horizon,**kwargs)
-            abs_err = (test-frsct).abs()
+            if not isinstance(frsct,pd.Series):
+                frsct = pd.Series(frsct)
             res=pd.DataFrame({'actual':test.values,
                             'forecast':frsct.values,
-                            'abs_err':abs_err.values,
                             'fold':idx,
                             'horizon':range(1,horizon+1)})
             results.append(res)
         raw_results = pd.concat(results)
+        raw_results['abs_err'] = (raw_results['actual']-raw_results['forecast']).abs()
         raw_results['ape']=raw_results['abs_err']/raw_results['actual'].abs()
         raw_results['sape']=raw_results['abs_err']/(raw_results['actual'].abs()+raw_results['forecast'].abs())*0.5
         mae = raw_results.groupby('horizon')[['abs_err']].agg(['mean','std','min','max']).reset_index()
