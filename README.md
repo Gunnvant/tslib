@@ -30,9 +30,7 @@ For evaluation and validation following classes are present:
 
 This is still a work in progress and I plan to include the following:
 
-1. Unit tests to automate CI pipelines
-2. Functionality to use supervised methods such as RandomForest, Xgboost
-3. Package this repo into a python package installable via pip, conda or uv.
+1. Package this repo into a python package installable via pip, conda or uv.
 
 You can find out how to use this library by referring to `./examples` folder
 
