@@ -35,3 +35,14 @@ This is still a work in progress and I plan to include the following:
 3. Package this repo into a python package installable via pip, conda or uv.
 
 You can find out how to use this library by referring to `./examples` folder
+
+### How to get started:
+This project is still a work in progress, so there is no python package. For the time being you can start using this library by setting up a conda environment using the `env.yaml` file.
+
+Run the following command:
+
+```shell
+conda env create -f env.yaml
+```
+
+This will install the dependencies. You can keep the `tslib` folder in your working directory and follow along the notebooks in `examples` directory.
